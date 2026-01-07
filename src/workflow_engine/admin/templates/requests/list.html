@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Requests{% endblock %}
+
+{% block content %}
+<h1>Requests</h1>
+
+<div class="filters">
+    <form method="get" action="/admin/requests">
+        <label for="status_filter">Filter by status:</label>
+        <select name="status_filter" id="status_filter" onchange="this.form.submit()">
+            <option value="">All</option>
+            {% for s in statuses %}
+            <option value="{{ s }}" {% if status_filter == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<p>Showing {{ requests|length }} of {{ total }} requests</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Target</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for req in requests %}
+        <tr>
+            <td>{{ req.id }}</td>
+            <td>{{ req.type.value }}</td>
+            <td>{{ req.target_name }} ({{ req.target_email }})</td>
+            <td><span class="status-badge status-{{ req.status.value.lower() }}">{{ req.status.value }}</span></td>
+            <td>{{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>
+                <a href="/admin/requests/{{ req.id }}" class="btn btn-small">View</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="6" class="empty">No requests found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="/admin/requests?page={{ page - 1 }}{% if status_filter %}&status_filter={{ status_filter }}{% endif %}" class="btn btn-small">Previous</a>
+    {% endif %}
+    
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    
+    {% if page < total_pages %}
+    <a href="/admin/requests?page={{ page + 1 }}{% if status_filter %}&status_filter={{ status_filter }}{% endif %}" class="btn btn-small">Next</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

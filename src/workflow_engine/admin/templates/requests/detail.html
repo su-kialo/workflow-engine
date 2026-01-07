@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Request #{{ req.id }}{% endblock %}
+
+{% block content %}
+<h1>Request #{{ req.id }}</h1>
+
+<a href="/admin/requests" class="btn btn-small">Back to List</a>
+
+<div class="detail-card">
+    <h2>Request Details</h2>
+    
+    <dl class="detail-list">
+        <dt>ID</dt>
+        <dd>{{ req.id }}</dd>
+        
+        <dt>Type</dt>
+        <dd>{{ req.type.value }}</dd>
+        
+        <dt>Status</dt>
+        <dd><span class="status-badge status-{{ req.status.value.lower() }}">{{ req.status.value }}</span></dd>
+        
+        <dt>Target Name</dt>
+        <dd>{{ req.target_name }}</dd>
+        
+        <dt>Target Email</dt>
+        <dd>{{ req.target_email }}</dd>
+        
+        {% if req.target_responsible_name %}
+        <dt>Target Responsible</dt>
+        <dd>{{ req.target_responsible_name }}</dd>
+        {% endif %}
+        
+        <dt>Created At</dt>
+        <dd>{{ req.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+        
+        {% if req.last_response_at %}
+        <dt>Last Response</dt>
+        <dd>{{ req.last_response_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+        {% endif %}
+        
+        {% if req.finished_at %}
+        <dt>Finished At</dt>
+        <dd>{{ req.finished_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+        {% endif %}
+    </dl>
+</div>
+
+<div class="detail-card">
+    <h2>Client Information</h2>
+    
+    <dl class="detail-list">
+        <dt>Name</dt>
+        <dd>{{ req.client.name }}</dd>
+        
+        <dt>Email</dt>
+        <dd>{{ req.client.email }}</dd>
+        
+        {% if req.client.phone %}
+        <dt>Phone</dt>
+        <dd>{{ req.client.phone }}</dd>
+        {% endif %}
+        
+        {% if req.client.address %}
+        <dt>Address</dt>
+        <dd>{{ req.client.address }}</dd>
+        {% endif %}
+    </dl>
+</div>
+
+{% if req.state_history %}
+<div class="detail-card">
+    <h2>State History</h2>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for state in req.state_history %}
+            <tr>
+                <td>{{ state.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td><code>{{ state.request_state_data }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if req.email_logs %}
+<div class="detail-card">
+    <h2>Email Log</h2>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Direction</th>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for email in req.email_logs %}
+            <tr>
+                <td>{{ email.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ 'Outgoing' if email.is_outgoing else 'Incoming' }}</td>
+                <td>{{ email.email_subject }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

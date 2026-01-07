@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>Total Requests</h3>
+        <p class="stat-value">{{ total_requests }}</p>
+    </div>
+    
+    <div class="stat-card">
+        <h3>Workflows</h3>
+        <p class="stat-value">{{ enabled_workflows }} / {{ total_workflows }}</p>
+        <p class="stat-label">enabled</p>
+    </div>
+</div>
+
+<h2>Requests by Status</h2>
+<div class="stats-grid">
+    {% for status, count in status_counts.items() %}
+    <div class="stat-card stat-{{ status.lower() }}">
+        <h3>{{ status }}</h3>
+        <p class="stat-value">{{ count }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<h2>Quick Actions</h2>
+<div class="actions">
+    <a href="/admin/requests" class="btn">View All Requests</a>
+    <a href="/admin/jobs" class="btn">Manage Jobs</a>
+</div>
+{% endblock %}

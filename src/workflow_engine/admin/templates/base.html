@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} - Workflow Engine</title>
+    <link rel="stylesheet" href="/admin/static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% if session %}
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="/admin/">Workflow Engine</a>
+        </div>
+        <div class="navbar-menu">
+            <a href="/admin/">Dashboard</a>
+            <a href="/admin/requests">Requests</a>
+            <a href="/admin/jobs">Jobs</a>
+            <a href="/admin/logout">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <script src="/admin/static/js/app.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

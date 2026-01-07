@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Background Jobs{% endblock %}
+
+{% block content %}
+<h1>Background Jobs</h1>
+
+{% if message %}
+<div class="alert alert-{{ message.type }}">{{ message.text }}</div>
+{% endif %}
+
+<div class="jobs-grid">
+    <div class="job-card">
+        <h3>Process Inbound Emails</h3>
+        <p>Fetches new emails, matches them to requests, classifies content, and advances workflow state machines.</p>
+        <p class="job-schedule">Scheduled: Every 60 seconds</p>
+        <form method="post" action="/admin/jobs/trigger/process_inbound">
+            <button type="submit" class="btn btn-primary">Trigger Now</button>
+        </form>
+    </div>
+    
+    <div class="job-card">
+        <h3>Check Deadline Conditions</h3>
+        <p>Examines open requests for deadline-based transitions and advances state machines when deadlines are met.</p>
+        <p class="job-schedule">Scheduled: Every 5 minutes</p>
+        <form method="post" action="/admin/jobs/trigger/check_deadlines">
+            <button type="submit" class="btn btn-primary">Trigger Now</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
